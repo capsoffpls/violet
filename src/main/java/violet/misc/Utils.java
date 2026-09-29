@@ -400,48 +400,52 @@ public class Utils {
 
     public static String getHoveredMsg(boolean singleLine) {
         ChatComponent chatHud = mc.gui.hud.getChat();
-        float mouseX = (float) mc.mouseHandler.getScaledXPos(mc.getWindow());
-        float mouseY = (float) mc.mouseHandler.getScaledYPos(mc.getWindow());
-        int chatBottom = Mth.floor((mc.getWindow().getGuiScaledHeight() - 40) / mc.options.chatScale().get());
-        int messageHeight = 9;
-        double chatLineSpacing = mc.options.chatLineSpacing().get();
-        int entryHeight = (int) (messageHeight * (chatLineSpacing + 1.0));
-        int visibleEnd = Math.min(chatHud.trimmedMessages.size(), chatHud.chatScrollbarPos + ChatComponent.getHeight(mc.options.chatHeightFocused().get()) / entryHeight);
+
+        double mouseX = mc.mouseHandler.getScaledXPos(mc.getWindow());
+        double mouseY = mc.mouseHandler.getScaledYPos(mc.getWindow());
+
+        double scale = mc.options.chatScale().get();
+        double lineSpacing = mc.options.chatLineSpacing().get();
+        int lineHeight = (int) (9.0 * (lineSpacing + 1.0));
+
+        double chatX = mouseX / scale - 4.0;
+        double chatY = (mc.getWindow().getGuiScaledHeight() - mouseY - 40.0) / (scale * lineHeight);
+
+        double chatWidth = Mth.floor(ChatComponent.getWidth(mc.options.chatWidth().get()) / scale);
+        if (chatX < -4.0 || chatX > chatWidth || chatY < 0.0) return "";
+
+        int visibleEnd = Math.min(
+                chatHud.trimmedMessages.size(),
+                chatHud.chatScrollbarPos + ChatComponent.getHeight(mc.options.chatHeightFocused().get()) / lineHeight
+        );
         List<GuiMessage.Line> visibleMessages = chatHud.trimmedMessages.subList(chatHud.chatScrollbarPos, visibleEnd);
-        int i = -1;
-        for (int index = 0; index < visibleMessages.size(); index++) {
-            int entryBottom = chatBottom - index * entryHeight;
-            int entryTop = entryBottom - entryHeight;
-            if (ActiveTextCollector.isPointInRectangle(mouseX, mouseY, 0, entryTop, ChatComponent.getWidth(mc.options.chatWidth().get()), entryBottom)) {
-                i = index;
-                break;
+
+        int i = Mth.floor(chatY);
+        if (i < 0 || i >= visibleMessages.size()) return "";
+
+        StringBuilder builder = new StringBuilder();
+        List<GuiMessage.Line> lines = new ArrayList<>();
+        if (singleLine) {
+            lines.add(visibleMessages.get(i));
+        } else {
+            for (int index = i + 1; index < visibleMessages.size(); index++) {
+                GuiMessage.Line line = visibleMessages.get(index);
+                if (line.endOfEntry()) break;
+                lines.addFirst(line);
+            }
+            for (int index = i; index >= 0; index--) {
+                GuiMessage.Line line = visibleMessages.get(index);
+                lines.add(line);
+                if (line.endOfEntry()) break;
             }
         }
-        if (i >= 0) {
-            StringBuilder builder = new StringBuilder();
-            List<GuiMessage.Line> lines = new ArrayList<>();
-            if (singleLine) {
-                lines.addFirst(visibleMessages.get(i));
-            } else {
-                for (int index = i + 1; index < visibleMessages.size(); index++) {
-                    GuiMessage.Line line = visibleMessages.get(index);
-                    if (line.endOfEntry()) break;
-                    lines.addFirst(line);
-                }
-                for (int index = i; index >= 0; index--) {
-                    GuiMessage.Line line = visibleMessages.get(index);
-                    lines.add(line);
-                    if (line.endOfEntry()) break;
-                }
-            }
-            for (GuiMessage.Line line : lines) {
-                line.content().accept((index, style, codePoint) -> {
-                    builder.appendCodePoint(codePoint);
-                    return true;
-                });
-            }
-            return ChatFormatting.stripFormatting(builder.toString());
+
+        for (GuiMessage.Line line : lines) {
+            line.content().accept((index, style, codePoint) -> {
+                builder.appendCodePoint(codePoint);
+                return true;
+            });
         }
-        return "";
+        return ChatFormatting.stripFormatting(builder.toString());
     }
 }

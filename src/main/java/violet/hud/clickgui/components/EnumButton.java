@@ -2,8 +2,10 @@ package violet.hud.clickgui.components;
 
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.TextBoxComponent;
+import io.wispforest.owo.ui.core.Sizing;
 import io.wispforest.owo.util.EventSource;
 import io.wispforest.owo.util.EventStream;
+import violet.Main;
 import violet.hud.clickgui.Settings;
 
 public class EnumButton<T extends Enum<T>> extends ButtonComponent {
@@ -39,7 +41,9 @@ public class EnumButton<T extends Enum<T>> extends ButtonComponent {
 
     public void setValue(T value) {
         this.value = value;
-        this.setMessage(net.minecraft.network.chat.Component.nullToEmpty(value.name()));
+        var text = net.minecraft.network.chat.Component.nullToEmpty(value.name());
+        this.setMessage(text);
+        this.horizontalSizing(Sizing.fixed(Main.mc.font.width(text) + 8));
         this.changedEvents.sink().onChanged(this.value.name());
     }
 

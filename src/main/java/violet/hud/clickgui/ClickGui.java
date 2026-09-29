@@ -116,14 +116,20 @@ public class ClickGui extends BaseOwoScreen<FlowLayout> {
             // player
             // //////////////////////////////////////////////////////////////////////////////////
             new Category("Player", List.of(
-                new Module("Break Delay", BreakDelay.instance, "<!> Disables the delay after breaking a block."),
+                new Module("Break Delay", BreakDelay.instance, "<!> Disables the delay after breaking a block.", new Settings(List.of(
+                    new Settings.EnumToggle<>("Only with", BreakDelay.mode, ""),
+                    new Settings.Toggle("Only Creative", BreakDelay.onlyCreative, "Makes it not work without Creative Mode")
+                ))),
                 new Module("Hotbar Scroll", HotbarScroll.instance, "Utilities for hotbar scrolling", new Settings(List.of(
                     new Settings.Toggle("Lock Scroll", HotbarScroll.lockScroll, "Disables the ability to change slot with mouse wheel."),
                     new Settings.Toggle("No Overflow", HotbarScroll.noOverflow, "Locks scroll at the edges.")
                 ))),
                 new Module("No Front Perspective", NoFrontPerspective.instance, "Removes the front facing camera perspective."),
                 new Module("Sneak Fix", SneakFix.instance, "Fixes the bug with camera bouncing while repeatedly sneaking."),
-                new Module("Use Delay", UseDelay.instance, "<!> Disables the use delay.")
+                new Module("Use Delay", UseDelay.instance, "<!> Disables the use delay.", new Settings(List.of(
+                    new Settings.EnumToggle<>("Only for", UseDelay.mode, "Other - everything that isnt a block item."),
+                    new Settings.Toggle("Only Creative", UseDelay.onlyCreative, "Makes it not work without Creative Mode")
+                )))
             )),
 
             // /////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +137,8 @@ public class ClickGui extends BaseOwoScreen<FlowLayout> {
             // /////////////////////////////////////////////////////////////////////////////////
             new Category("Movement", List.of(
                 new Module("AutoSprint", AutoSprint.instance, "Toggle Sprint (better than minecraft's as does on reset on world change)", new Settings(List.of(
-                    new Settings.Keybind("Toggle", AutoSprint.toggleKey, "Swaps between sprinting and walking.")
+                    new Settings.Keybind("Toggle", AutoSprint.toggleKey, "Swaps between sprinting and walking."),
+                    new Settings.Toggle("Show Feedback", AutoSprint.feedback, "After toggling with keybind shows the current state.")
                 ))),
                 new Module("Jump Cooldown", NoJumpCooldown.instance, "<!> Removes the 10 tick jump delay. Some servers may consider this a cheat.", new Settings(List.of(
                     new Settings.Keybind("Toggle", NoJumpCooldown.toggleKey, "Disables/Enables the module.")
@@ -258,7 +265,20 @@ public class ClickGui extends BaseOwoScreen<FlowLayout> {
             Rendering.drawBorder(context, button.getX(), button.getY(), button.getWidth(), button.getHeight(), ClickGuiFeature.getAccentColor() | 0xFF000000);
         });
         root.child(hudEditorButton);
-        
+
+        //// presets button
+        //ButtonComponent presetsButton = UIComponents.button(Component.literal("Presets"), button -> mc.gui.setScreen(new HudEditorScreen()));
+        //presetsButton.margins(Insets.of(0, 3 + 20 + 1, 0, 3));
+        //presetsButton.positioning(Positioning.relative(100, 100));
+        //presetsButton.renderer((context, button, delta) -> {
+        //    context.fill(button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), 0xff101010);
+        //    Rendering.drawBorder(context, button.getX(), button.getY(), button.getWidth(), button.getHeight(), ClickGuiFeature.getAccentColor() | 0xFF000000);
+        //});
+        //root.child(presetsButton);
+
+
+
+
         // search box
         FlatTextbox searchBox = new FlatTextbox(Sizing.fixed(200));
         searchBox.setSuggestion("Search...");

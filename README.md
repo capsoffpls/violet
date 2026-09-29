@@ -68,7 +68,7 @@ https://github.com/WhatYouThing/NoFrills
   
 
 - **Other Commands** (under `/` prefix)
-    - **`violet`**: opens the main config menu.
+    - **`violet`**: opens the main config menu. Also works as `/v`
     - **`enchantv`**: Essentially better /enchant command, requires creative mode as normal /enchant is handled server-side.
 
 </details>

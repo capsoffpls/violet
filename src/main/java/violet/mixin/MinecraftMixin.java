@@ -14,6 +14,6 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isItemEnabled(Lnet/minecraft/world/flag/FeatureFlagSet;)Z"))
     private void onDoItemUseHand(CallbackInfo ci) {
-        if (UseDelay.instance.isActive()) rightClickDelay = 0;
+        if (UseDelay.instance.isActive() && UseDelay.canChangeDelay()) rightClickDelay = 0;
     }
 }
