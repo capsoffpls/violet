@@ -2,7 +2,7 @@ package violet.features.movement;
 
 import static violet.Main.mc;
 
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import meteordevelopment.orbit.EventHandler;
 import violet.config.Feature;
@@ -15,7 +15,7 @@ import violet.misc.Utils;
 public class AutoSprint {
     public static final Feature instance = new Feature("autosprint");
 
-    public static final SettingKeybind toggleKey = new SettingKeybind(GLFW.GLFW_KEY_UNKNOWN, "toggleKey", instance);
+    public static final SettingKeybind toggleKey = new SettingKeybind(InputConstants.UNKNOWN.getValue(), "toggleKey", instance);
     public static final SettingBool feedback = new SettingBool(true, "feedback", instance);
 
     public static boolean isSprinting = true;
@@ -41,7 +41,7 @@ public class AutoSprint {
     private static void onKey(InputEvent event) {
         if (!instance.isActive() || mc.gui.screen() != null) return;
 
-        if (toggleKey.isKey(event.key) && event.action == GLFW.GLFW_PRESS) {
+        if (toggleKey.isKey(event.key) && event.action == InputConstants.PRESS) {
             isSprinting = !isSprinting;
             Utils.info("Toggle Sprint: " + (isSprinting ? "§a" : "§c") + isSprinting);
         }

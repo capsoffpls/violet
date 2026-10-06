@@ -1,6 +1,7 @@
 package violet.hud.clickgui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.InputConstants;
 import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.UIComponents;
@@ -39,7 +40,6 @@ import violet.misc.RenderColor;
 import violet.misc.Rendering;
 import violet.misc.Utils;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,17 +67,17 @@ public class ClickGui extends BaseOwoScreen<FlowLayout> {
 
     @Override
     public boolean keyPressed(KeyEvent input) {
-        if (input.key() != GLFW.GLFW_KEY_LEFT && input.key() != GLFW.GLFW_KEY_RIGHT && input.key() != GLFW.GLFW_KEY_PAGE_DOWN && input.key() != GLFW.GLFW_KEY_PAGE_UP) {
+        if (input.key() != InputConstants.KEY_LEFT && input.key() != InputConstants.KEY_RIGHT && input.key() != InputConstants.KEY_PAGEDOWN && input.key() != InputConstants.KEY_PAGEUP) {
             return super.keyPressed(input);
         } else {
             for (Category category : this.categories) {
                 for (Module module : category.features) {
                     if (module.isInBoundingBox(this.mouseX, this.mouseY)) {
-                        return category.scroll.onMouseScroll(0, 0, input.key() == GLFW.GLFW_KEY_PAGE_UP ? 4 : -4);
+                        return category.scroll.onMouseScroll(0, 0, input.key() == InputConstants.KEY_PAGEUP ? 4 : -4);
                     }
                 }
             }
-            return this.mainScroll.onMouseScroll(0, 0, input.key() == GLFW.GLFW_KEY_PAGE_UP ? 4 : -4);
+            return this.mainScroll.onMouseScroll(0, 0, input.key() == InputConstants.KEY_PAGEUP ? 4 : -4);
         }
     }
 

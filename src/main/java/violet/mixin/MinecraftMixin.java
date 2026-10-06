@@ -13,7 +13,7 @@ public abstract class MinecraftMixin {
     @Shadow private int rightClickDelay;
 
     @Inject(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isItemEnabled(Lnet/minecraft/world/flag/FeatureFlagSet;)Z"))
-    private void onDoItemUseHand(CallbackInfo ci) {
+    private void violet$removeUseDelay(CallbackInfo ci) {
         if (UseDelay.instance.isActive() && UseDelay.canChangeDelay()) rightClickDelay = 0;
     }
 }

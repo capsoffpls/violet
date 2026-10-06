@@ -2,8 +2,7 @@ package violet.features.misc;
 
 import static violet.Main.mc;
 
-import org.lwjgl.glfw.GLFW;
-
+import com.mojang.blaze3d.platform.InputConstants;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.client.gui.screens.ChatScreen;
 import violet.config.Feature;
@@ -27,7 +26,7 @@ public class VioletCommands {
 
     @EventHandler
     private static void onKey(InputEvent event) {
-        if (!openChatOnKeybind.value() || !instance.isActive() || event.action != GLFW.GLFW_PRESS) return;
+        if (!openChatOnKeybind.value() || !instance.isActive() || event.action != InputConstants.PRESS) return;
 
         int expectedKey = getGlfwKey(getPrefix());
         if (expectedKey == -1 || event.key != expectedKey) return;
@@ -39,16 +38,16 @@ public class VioletCommands {
 
     private static int getGlfwKey(char c) {
         return switch (c) {
-            case '.' -> GLFW.GLFW_KEY_PERIOD;
-            case ',' -> GLFW.GLFW_KEY_COMMA;
-            case '/' -> GLFW.GLFW_KEY_SLASH;
-            case ';' -> GLFW.GLFW_KEY_SEMICOLON;
-            case '\'' -> GLFW.GLFW_KEY_APOSTROPHE;
-            case '-' -> GLFW.GLFW_KEY_MINUS;
-            case '=' -> GLFW.GLFW_KEY_EQUAL;
-            case '[' -> GLFW.GLFW_KEY_LEFT_BRACKET;
-            case ']' -> GLFW.GLFW_KEY_RIGHT_BRACKET;
-            case '\\' -> GLFW.GLFW_KEY_BACKSLASH;
+            case '.'  -> InputConstants.KEY_PERIOD;
+            case ','  -> InputConstants.KEY_COMMA;
+            case '/'  -> InputConstants.KEY_SLASH;
+            case ';'  -> InputConstants.KEY_SEMICOLON;
+            case '\'' -> InputConstants.KEY_APOSTROPHE;
+            case '-'  -> InputConstants.KEY_MINUS;
+            case '='  -> InputConstants.KEY_EQUALS;
+            case '['  -> InputConstants.KEY_LBRACKET;
+            case ']'  -> InputConstants.KEY_RBRACKET;
+            case '\\' -> InputConstants.KEY_BACKSLASH;
             default -> Character.isLetter(c) ? (int) Character.toUpperCase(c) : -1;
         };
     }

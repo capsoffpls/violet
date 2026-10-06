@@ -1,5 +1,6 @@
 package violet.features.chat;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.client.gui.screens.ChatScreen;
 import violet.config.Feature;
@@ -8,7 +9,6 @@ import violet.config.SettingInt;
 import violet.config.SettingKeybind;
 import violet.events.InputEvent;
 import violet.misc.Utils;
-import org.lwjgl.glfw.GLFW;
 
 import static violet.Main.mc;
 import static violet.misc.Utils.getHoveredMsg;
@@ -19,8 +19,8 @@ import static violet.misc.Utils.getHoveredMsg;
 public class ChatPatches {
     public static final Feature instance = new Feature("chatPatches");
 
-    public static final SettingKeybind copyKey = new SettingKeybind(GLFW.GLFW_KEY_UNKNOWN, "copyKey", instance);
-    public static final SettingKeybind copyLineKey = new SettingKeybind(GLFW.GLFW_KEY_UNKNOWN, "copyLineKey", instance);
+    public static final SettingKeybind copyKey = new SettingKeybind(InputConstants.UNKNOWN.getValue(), "copyKey", instance);
+    public static final SettingKeybind copyLineKey = new SettingKeybind(InputConstants.UNKNOWN.getValue(), "copyLineKey", instance);
     public static final SettingBool trimOnCopy = new SettingBool(false, "trimOnCopy", instance);
     public static final SettingBool msgOnCopy = new SettingBool(false, "msgOnCopy", instance);
     public static final SettingInt copyMsgLength = new SettingInt(50, "copyMsgLength", instance);
@@ -33,7 +33,7 @@ public class ChatPatches {
     @EventHandler
     private static void onInput(InputEvent event) {
         if (instance.isActive() && mc.gui.screen() instanceof ChatScreen && (copyKey.isKey(event.key) || copyLineKey.isKey(event.key))) {
-            if (event.action == GLFW.GLFW_PRESS) {
+            if (event.action == InputConstants.PRESS) {
                 String message = getHoveredMsg(copyLineKey.isKey(event.key));
                 if (message.isEmpty()) return;
                 mc.keyboardHandler.setClipboard(trimOnCopy.value() ? message.trim() : message);

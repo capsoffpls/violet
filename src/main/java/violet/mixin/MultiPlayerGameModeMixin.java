@@ -17,19 +17,19 @@ public abstract class MultiPlayerGameModeMixin {
     @Shadow private int destroyDelay;
 
     @Redirect(method = "continueDestroyBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;destroyDelay:I", opcode = Opcodes.PUTFIELD, ordinal = 1), require = 0)
-    private void creativeBreakDelayChange(MultiPlayerGameMode interactionManager, int value) {
+    private void violet$creativeBreakDelayChange(MultiPlayerGameMode interactionManager, int value) {
         BlockBreakingCooldownEvent event = eventBus.post(new BlockBreakingCooldownEvent(value));
         destroyDelay = event.cooldown;
     }
 
     @Redirect(method = "continueDestroyBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;destroyDelay:I", opcode = Opcodes.PUTFIELD, ordinal = 2), require = 0)
-    private void survivalBreakDelayChange(MultiPlayerGameMode interactionManager, int value) {
+    private void violet$survivalBreakDelayChange(MultiPlayerGameMode interactionManager, int value) {
         BlockBreakingCooldownEvent event = eventBus.post(new BlockBreakingCooldownEvent(value));
         destroyDelay = event.cooldown;
     }
 
     @Redirect(method = "startDestroyBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;destroyDelay:I", opcode = Opcodes.PUTFIELD), require = 0)
-    private void attackBlockBreakDelayChange(MultiPlayerGameMode interactionManager, int value) {
+    private void violet$attackBlockBreakDelayChange(MultiPlayerGameMode interactionManager, int value) {
         BlockBreakingCooldownEvent event = eventBus.post(new BlockBreakingCooldownEvent(value));
         destroyDelay = event.cooldown;
     }

@@ -10,7 +10,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import violet.features.render.Fullbright;
 import violet.features.render.Viewmodel;
 import violet.misc.Utils;
@@ -27,37 +30,27 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract boolean isHolding(Item item);
 
-    @ModifyExpressionValue(method = "getCurrentSwingDuration", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectUtil;hasDigSpeed(Lnet/minecraft/world/entity/LivingEntity;)Z"))
-    private boolean hasHaste(boolean original) {
-        if (Viewmodel.instance.isActive() && Viewmodel.noHaste.value() && Utils.isSelf(this)) {
-            return false;
-        }
-        return original;
-    }
+    @Inject(method = "getModifiedSwingDuration", at = @At("HEAD"), cancellable = true)
+    private void violet$swingDuration(SwingAnimation animation, CallbackInfoReturnable<Integer> cir) {
+        if (!Viewmodel.instance.isActive() || !Utils.isSelf(this)) return;
 
-    @ModifyExpressionValue(method = "getCurrentSwingDuration", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hasEffect(Lnet/minecraft/core/Holder;)Z"))
-    private boolean hasMiningFatigue(boolean original) {
-        if (Viewmodel.instance.isActive() && Viewmodel.noHaste.value() && Utils.isSelf(this)) {
-            return false;
+        if (Viewmodel.noBowSwing.value() && this.isHolding(Items.BOW)) {
+            cir.setReturnValue(0);
+            return;
         }
-        return original;
-    }
 
-    @ModifyReturnValue(method = "getCurrentSwingDuration", at = @At("RETURN"))
-    private int getSwingSpeed(int original) {
-        if (Viewmodel.instance.isActive() && Utils.isSelf(this)) {
-            if (Viewmodel.noBowSwing.value() && this.isHolding(Items.BOW)) {
-                return 0;
-            }
-            if (Viewmodel.speed.value() > 0) {
-                return Viewmodel.speed.value();
-            }
+        if (Viewmodel.speed.value() > 0) {
+            cir.setReturnValue(Viewmodel.speed.value());
+            return;
         }
-        return original;
+
+        if (Viewmodel.noHaste.value()) {
+            cir.setReturnValue(animation.duration());
+        }
     }
 
     @ModifyReturnValue(method = "hasEffect", at = @At("RETURN"))
-    private boolean hasNightVision(boolean original, Holder<MobEffect> effect) {
+    private boolean violet$hasNightVision(boolean original, Holder<MobEffect> effect) {
         if (Fullbright.instance.isActive() && Utils.isSelf(this) && effect == MobEffects.NIGHT_VISION) {
             if (Fullbright.noEffect.value() && !Fullbright.mode.value().equals(Fullbright.Mode.Potion)) {
                 return false;

@@ -7,7 +7,6 @@ import io.wispforest.owo.util.EventSource;
 import io.wispforest.owo.util.EventStream;
 import violet.features.misc.ClickGuiFeature;
 import violet.misc.Rendering;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,9 +14,9 @@ import net.minecraft.network.chat.MutableComponent;
 public class KeybindButton extends ButtonComponent {
     private final EventStream<KeybindChanged> changedEvents = KeybindChanged.newStream();
     private final List<Integer> keybindBlacklist = List.of(
-            GLFW.GLFW_KEY_UNKNOWN,
-            GLFW.GLFW_MOUSE_BUTTON_LEFT,
-            GLFW.GLFW_KEY_ESCAPE
+            InputConstants.UNKNOWN.getValue(),
+            InputConstants.MOUSE_BUTTON_LEFT,
+            InputConstants.KEY_ESCAPE
     );
     public MutableComponent unbound = net.minecraft.network.chat.Component.literal("Not Bound").withColor(0xffffff);
     public MutableComponent binding = net.minecraft.network.chat.Component.literal("Press Key...").withColor(0xffffff);
@@ -28,7 +27,7 @@ public class KeybindButton extends ButtonComponent {
         });
         this.onPress(button -> {
             if (this.isBinding) {
-                this.bind(GLFW.GLFW_KEY_UNKNOWN);
+            this.bind(InputConstants.UNKNOWN.getValue());
             } else {
                 this.setMessage(this.binding);
                 this.isBinding = true;
@@ -43,7 +42,7 @@ public class KeybindButton extends ButtonComponent {
     }
 
     public net.minecraft.network.chat.Component getKeyLabel(int keycode) {
-        InputConstants.Key input = InputConstants.Type.KEYSYM.getOrCreate(keycode);
+        InputConstants.Key input = InputConstants.Type.KEYBOARD.getOrCreate(keycode);
         if (input.getDisplayName().getString().equals(input.getName())) { // fall back to a mouse key if the keyboard key has no translation
             return InputConstants.Type.MOUSE.getOrCreate(keycode).getDisplayName();
         } else {
@@ -54,7 +53,7 @@ public class KeybindButton extends ButtonComponent {
     public void bind(int key) {
         if (!this.valid(key)) {
             this.setMessage(this.unbound);
-            changedEvents.sink().onBind(GLFW.GLFW_KEY_UNKNOWN);
+            changedEvents.sink().onBind(InputConstants.UNKNOWN.getValue());
         } else {
             this.setMessage(getKeyLabel(key));
             changedEvents.sink().onBind(key);

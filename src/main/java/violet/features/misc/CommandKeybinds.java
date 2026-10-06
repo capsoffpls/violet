@@ -3,6 +3,7 @@ package violet.features.misc;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.platform.InputConstants;
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.UIComponents;
 import io.wispforest.owo.ui.container.FlowLayout;
@@ -19,7 +20,6 @@ import violet.events.InputEvent;
 import violet.hud.clickgui.Settings;
 import violet.hud.clickgui.components.*;
 import violet.misc.Utils;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class CommandKeybinds {
                 }
                 JsonObject obj = new JsonObject();
                 obj.addProperty("name", "New Keybind");
-                obj.addProperty("key", GLFW.GLFW_KEY_UNKNOWN);
+                obj.addProperty("key", InputConstants.UNKNOWN.getValue());
                 obj.addProperty("command", "");
                 obj.addProperty("enabled", true);
                 obj.addProperty("modifier", Modifier.Any.name());
@@ -86,15 +86,15 @@ public class CommandKeybinds {
         return switch (modifier) {
             case Any -> -1;
             case None -> 0;
-            case Shift -> GLFW.GLFW_MOD_SHIFT;
-            case Alt -> GLFW.GLFW_MOD_ALT;
-            case Ctrl -> GLFW.GLFW_MOD_CONTROL;
+            case Shift -> InputConstants.MOD_SHIFT;
+            case Alt -> InputConstants.MOD_ALT;
+            case Ctrl -> InputConstants.MOD_CONTROL;
         };
     }
 
     @EventHandler
     public static void onKey(InputEvent event) {
-        if (event.action != GLFW.GLFW_PRESS) return;
+        if (event.action != InputConstants.PRESS) return;
         if (instance.isActive() && ((allowInGui.value() && mc.gui.screen() instanceof AbstractContainerScreen) || mc.gui.screen() == null)) {
             if (data.value().has("binds")) {
                 for (JsonElement entry : data.value().get("binds").getAsJsonArray()) {
@@ -120,7 +120,7 @@ public class CommandKeybinds {
                     }
                     String command = bind.get("command").getAsString();
                     if (!command.isEmpty()) {
-                        if (event.action == GLFW.GLFW_PRESS) {
+                        if (event.action == InputConstants.PRESS) {
                             if (command.startsWith(String.valueOf(VioletCommands.getPrefix()))) {
                                 CommandHandler.handle(command, false);
                             } else Utils.say(command);

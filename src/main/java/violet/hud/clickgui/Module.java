@@ -1,5 +1,6 @@
 package violet.hud.clickgui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.*;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -7,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import violet.config.Feature;
 import violet.features.misc.ClickGuiFeature;
 import violet.hud.clickgui.components.PlainLabel;
-import org.lwjgl.glfw.GLFW;
 
 import static violet.Main.mc;
 
@@ -42,9 +42,9 @@ public class Module extends FlowLayout {
     @Override
     public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
         if (click.y() <= (double) this.label.fullSize().height()) {
-            if (click.button() == GLFW.GLFW_MOUSE_BUTTON_1) {
+            if (click.button() == InputConstants.MOUSE_BUTTON_LEFT) {
                 this.active(!this.feature.isActive());
-            } else if (click.button() == GLFW.GLFW_MOUSE_BUTTON_2 && this.options != null) {
+            } else if (click.button() == InputConstants.MOUSE_BUTTON_RIGHT && this.options != null) {
                 mc.gui.setScreen(this.options);
             }
             return true;

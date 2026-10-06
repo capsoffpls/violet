@@ -52,9 +52,8 @@ public abstract class ClientLevelMixin extends Level {
         }
     }
 
-    @Inject(method = "addBreakingBlockEffect", at = @At("HEAD"), cancellable = true)
-    private void onBreakingParticle(BlockPos
-        pos, Direction direction, CallbackInfo ci) {
+    @Inject(method = "addBreakingBlockEffects", at = @At("HEAD"), cancellable = true)
+    private void onBreakingParticle(BlockPos pos, Direction direction, boolean playSound, CallbackInfo ci) {
         if (NoBlockBreakParticles.instance.isActive()) {
             ci.cancel();
         }

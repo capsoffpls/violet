@@ -19,14 +19,14 @@ import static violet.Main.eventBus;
 public abstract class MouseHandlerMixin {
 
     @Inject(method = "onButton", at = @At("HEAD"), cancellable = true)
-    private void onMouseButton(long handle, MouseButtonInfo rawButtonInfo, int action, CallbackInfo ci) {
+    private void violet$onMouseButton(long handle, MouseButtonInfo rawButtonInfo, int action, CallbackInfo ci) {
         if (eventBus.post(new InputEvent(rawButtonInfo, action)).isCancelled()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;setSelectedSlot(I)V"), cancellable = true)
-    private void onBeforeSetSlot(long handle, double xoffset, double yoffset, CallbackInfo ci, @Local(name = "inventory") Inventory inventory) {
+    private void violet$onBeforeSetSlot(long handle, double xoffset, double yoffset, CallbackInfo ci, @Local(name = "inventory") Inventory inventory) {
         if (!HotbarScroll.instance.isActive()) return;
         
         if (HotbarScroll.lockScroll.value()) ci.cancel();

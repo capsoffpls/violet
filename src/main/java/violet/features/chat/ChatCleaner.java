@@ -1,6 +1,7 @@
 package violet.features.chat;
 
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.platform.InputConstants;
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.UIComponents;
 import io.wispforest.owo.ui.container.FlowLayout;
@@ -8,7 +9,6 @@ import io.wispforest.owo.ui.core.*;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 import violet.config.Config;
 import violet.config.Feature;
 import violet.config.SettingBool;
@@ -33,7 +33,7 @@ public class ChatCleaner {
     public static final String tooltip = "Block selected messages or patterns from appearing on chat.";
 
     public static final SettingJson blacklist = new SettingJson(new JsonObject(), "blacklist", instance);
-    public static final SettingKeybind addMessageKey = new SettingKeybind(GLFW.GLFW_KEY_UNKNOWN, "addMessageKey", instance);
+    public static final SettingKeybind addMessageKey = new SettingKeybind(InputConstants.UNKNOWN.getValue(), "addMessageKey", instance);
     public static final SettingBool showFeedback = new SettingBool(true, "showFeedback", instance);
 
     public static List<FlowLayout> getSettingsList() {
@@ -81,7 +81,7 @@ public class ChatCleaner {
         if (!instance.isActive()) return;
         if (!(mc.gui.screen() instanceof ChatScreen)) return;
         if (!addMessageKey.isKey(event.key)) return;
-        if (event.action != GLFW.GLFW_PRESS) return;
+        if (event.action != InputConstants.PRESS) return;
 
         String message = getHoveredMsg(true);
         if (message.isEmpty()) return;

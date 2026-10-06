@@ -17,22 +17,21 @@ import violet.features.render.DebugScreen;
 @Mixin(DebugScreenOverlay.class)
 public class DebugScreenOverlayMixin {
 
-    @Inject(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;extractLines(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Ljava/util/List;Z)V", ordinal = 0))
-    private void onExtractLeftLines(GuiGraphicsExtractor graphics, CallbackInfo ci, @Local(name = "leftLines") List<String> leftLines) {
+    @Inject(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;extractLines(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Ljava/util/List;ZI)V", ordinal = 0))
+    private void violet$onExtractLeftLines(GuiGraphicsExtractor graphics, CallbackInfo ci, @Local(name = "leftLines") List<String> leftLines) {
         if (!DebugScreen.instance.isActive() || mc.player == null) return;
-        modifyLines(leftLines);
+        violet$modifyLines(leftLines);
     }
 
-    @Inject(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;extractLines(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Ljava/util/List;Z)V", ordinal = 1))
-    private void onExtractRightLines(GuiGraphicsExtractor graphics, CallbackInfo ci, @Local(name = "rightLines") List<String> rightLines) {
+    @Inject(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;extractLines(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Ljava/util/List;ZI)V", ordinal = 1))
+    private void violet$onExtractRightLines(GuiGraphicsExtractor graphics, CallbackInfo ci, @Local(name = "rightLines") List<String> rightLines) {
         if (!DebugScreen.instance.isActive() || mc.player == null) return;
-        modifyLines(rightLines);
+        violet$modifyLines(rightLines);
     }
-
 
     @Unique
-    private void modifyLines(List<String> lines) {
-        // no need to check if mc.player != null as its done before calling the function
+    private void violet$modifyLines(List<String> lines) {
+        // mc.player != null jest sprawdzane przed wywołaniem
         lines.replaceAll(line -> {
             if (line.startsWith("Facing:")) return "Facing: %s (%%.%df / %%.%df)".formatted(
                     mc.player.getDirection(),

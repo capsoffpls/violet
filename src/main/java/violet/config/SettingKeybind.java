@@ -1,6 +1,6 @@
 package violet.config;
 
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public class SettingKeybind extends SettingInt {
     public SettingKeybind(int defaultValue, String key, String parentKey) {
@@ -16,10 +16,10 @@ public class SettingKeybind extends SettingInt {
     }
 
     public boolean bound() {
-        return this.value() != GLFW.GLFW_KEY_UNKNOWN;
+        return this.value() != InputConstants.UNKNOWN.getValue();
     }
 
     public boolean isKey(int key) {
-        return key != GLFW.GLFW_KEY_UNKNOWN && key == this.value();
+        return key != InputConstants.UNKNOWN.getValue() && key == this.value();
     }
 }

@@ -2,8 +2,8 @@ package violet.features.movement;
 
 import static violet.Main.mc;
 
-import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import meteordevelopment.orbit.EventHandler;
 import violet.config.Feature;
 import violet.config.SettingKeybind;
@@ -14,7 +14,7 @@ import violet.mixin.LivingEntityAccessor;
 public class NoJumpCooldown {
     public static final Feature instance = new Feature("noJumpCooldown");
 
-    public static final SettingKeybind toggleKey = new SettingKeybind(GLFW.GLFW_KEY_UNKNOWN, "toggleKey", instance);
+    public static final SettingKeybind toggleKey = new SettingKeybind(InputConstants.UNKNOWN.getValue(), "toggleKey", instance);
 
     @EventHandler
     private static void onTick(WorldTickEvent event) {
@@ -26,7 +26,7 @@ public class NoJumpCooldown {
     private static void onKey(InputEvent event) {
         if (mc.gui.screen() != null) return;
     
-        if (toggleKey.isKey(event.key) && event.action == GLFW.GLFW_PRESS) {
+        if (toggleKey.isKey(event.key) && event.action == InputConstants.PRESS) {
             instance.setActive(!instance.isActive());        
         }
     }

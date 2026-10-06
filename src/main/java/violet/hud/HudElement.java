@@ -1,5 +1,6 @@
 package violet.hud;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import io.wispforest.owo.ui.container.DraggableContainer;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.UIContainers;
@@ -11,7 +12,6 @@ import violet.config.SettingDouble;
 import violet.hud.clickgui.Settings;
 import violet.misc.RenderColor;
 import violet.misc.Utils;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,11 +94,11 @@ public class HudElement extends DraggableContainer<FlowLayout> {
     @Override
     public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
         if (this.isAdded()) {
-            if (click.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            if (click.button() == InputConstants.MOUSE_BUTTON_LEFT) {
                 this.toggling = true;
                 return true;
             }
-            if (click.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+            if (click.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
                 mc.gui.setScreen(this.options);
                 return true;
             }
