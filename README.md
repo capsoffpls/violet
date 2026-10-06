@@ -1,4 +1,4 @@
-# Violet 26.2
+# Violet 26.3
 
 I don't like having 20 different mods, some conflicting, some being also hacked clients, so I compiled
 all the most essential features into one mod - Violet.
